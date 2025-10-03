@@ -3,18 +3,15 @@ const connectDB = require('./config/database');
 const app = express();
 const User = require('./models/user');
 
+app.use(express.json()); // Middleware to parse JSON bodies
+
 
 app.post("/signup", async (req, res) => {
-    const user = new User({
-        firstName: "Dinesh",
-        lastName: "K",
-        email: "dinesh@gmail.com",
-        password: "9742",
-        age: 22
-    });
+    // Creating new instance of User model
+    const user = new User(req.body);
     try {
         await user.save();
-        res.send("User signed up successfully");
+        res.send("User added up successfully");
     } catch (err) {
         res.status(500).send("Error signing up user");
     }

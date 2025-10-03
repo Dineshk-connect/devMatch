@@ -51,6 +51,13 @@ Session -02
 - Push some documents using API calls from postman
 - Error handling using try catch
 
+Session -03
+
+- Difference b/w JS object and JSON
+- Add the express.json middleware to your app
+- Make your API dynamic to recieve data from the end user
+
+
 
 
 
