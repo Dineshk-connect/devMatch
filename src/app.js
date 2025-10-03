@@ -1,31 +1,37 @@
-const express=require('express');
-
-const app=express();
-
-// app.use("/test",(req,res)=>{
-//     res.send("Hey /test");
-// });
+const express = require('express');
+const connectDB = require('./config/database');
+const app = express();
+const User = require('./models/user');
 
 
-// app.use("/hello",(req,res)=>{
-//     res.send("Hello from the server");
-// });
-
-// app.use("/",(req,res)=>{
-//     res.send("Route is blank");
-// });
-
-app.get("/User",(req,res)=>{
-    res.send({firstname:"kendrick", lastname:"lamar"});
+app.post("/signup", async (req, res) => {
+    const user = new User({
+        firstName: "Dinesh",
+        lastName: "K",
+        email: "dinesh@gmail.com",
+        password: "9742",
+        age: 22
+    });
+    try {
+        await user.save();
+        res.send("User signed up successfully");
+    } catch (err) {
+        res.status(500).send("Error signing up user");
+    }
 });
 
-app.post("/User", (req,res)=>{
-    res.send("Data successfully sent to database");
-})
 
-app.delete("/User", (req,res)=>{
-    res.send("Deleted Successfully");
-})
-app.listen(3000,()=>{
-    console.log("Server is running successfully");
-});
+
+connectDB()
+    .then(() => {
+        console.log("Database connected successfully");
+
+        app.listen(3000, () => {
+            console.log("Server is running successfully");
+        });
+    })
+    .catch((err) => {
+        console.log("Database connection failed", err);
+    });
+
+

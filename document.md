@@ -27,5 +27,30 @@ Session -02
 - Order of the routes matteer here.
 - Install Postman App and make a workspace/collection > test API call
 
+Day-2 
+
+Session - 01
+
+- Multiple route handlers
+- next()
+- next function and errors along with res,send()
+- Middleware
+- How express Js  handles the requests behind the scences
+- Difference between app.use vs app.all
+- Dummy Authentication middleware for Admin and user
+- Error Handling using app.use("/", (err,req,res,next)={});
+
+Session -02
+ 
+- Create a free cluster on MongDB officila website (Mongo Atlas)
+- Install mongoose library
+- Connect your application to the Database "Connection-url"/devMatch
+- Call connectDB function and connect to database before starting application on 3000
+- Create a UserSchema and UserModel
+- Create Post /signup API to add data to the database
+- Push some documents using API calls from postman
+- Error handling using try catch
+
+
 
 
