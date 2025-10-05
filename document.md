@@ -56,6 +56,25 @@ Session -03
 - Difference b/w JS object and JSON
 - Add the express.json middleware to your app
 - Make your API dynamic to recieve data from the end user
+- API - Get user by email
+- API - Feed API - GET/feed - get all the users from the database
+- API - Update a user
+
+
+Day -03
+
+Session -01
+
+- Explore schematype options from the documentation 
+- add required, unique, lowercase, min, minLength, trim 
+- Add default
+- Create a custom validate function for gender
+- Improve the DB Schema - PUT all the appropriate validations on each field in schema
+- Add timestams to the userschema
+
+
+
+
 
 
 
