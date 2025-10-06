@@ -78,5 +78,10 @@ Session -01
 
 
 
+Day -04
 
+Session -01
 
+- validate data in signup API
+- Install bcrypt package
+- Create Passwordhash using bcrypt.hash 
