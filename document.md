@@ -106,3 +106,14 @@ Session -01
 
 - Create UserSchema method to getJWT()
 - Create Userschema method to comparepassword(passwordInputByUser)
+
+Session -02
+
+- Explore tinder APIs
+- Create a list of All APIs
+- Group multiple Routes under respective Routers
+- Read documnetation for express.Router()
+- Create routes folder for managing auth, profile, request, routers
+- Create authRouter, profileRouter, requestRouter
+- Import these routers in app.js
+
