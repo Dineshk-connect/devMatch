@@ -17,20 +17,7 @@ app.use("/", authRouter);
 app.use("/", userRouter);
 app.use("/", profileRouter);
 app.use("/", requestRouter);   
-// app.delete("/user", async (req, res) => {
-//   const userid = req.body.userid;
-
-//   try {
-//     const user = await User.findByIdAndDelete(userid);
-//     if (!user) {
-//       res.status(404).send("User not found");
-//     } else {
-//       res.send("User deleted successfully");
-//     }
-//   } catch (err) {
-//     res.status(500).send("Something went wrong");
-//   }
-// });
+ 
 
 // app.patch("/user/:userid", async (req, res) => {
 //   const userid = req.params?.userid;
