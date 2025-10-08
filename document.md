@@ -85,3 +85,24 @@ Session -01
 - validate data in signup API
 - Install bcrypt package
 - Create Passwordhash using bcrypt.hash 
+- Create login API
+- Compare passwords and throw errors if email and password are incorrect
+
+Session -02
+
+- Install cookie-parser
+- Create GET /profile  API and check if you get the cookie back 
+- Install jsonwebtoken
+- In login API, after email and password validation, create a JWT Token and send it to user in 
+
+Day -05
+
+Session -01
+
+- Read the cookies inside your profile API and find the logged in user
+- UserAuth Middleware
+- Add the userAuth middleware in Profile API and a new SendConnectionRequest API
+- Set the exipry of JWT token and cookies to 7 days
+
+- Create UserSchema method to getJWT()
+- Create Userschema method to comparepassword(passwordInputByUser)
