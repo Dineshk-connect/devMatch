@@ -121,3 +121,18 @@ Session -02
 - Create PATCH /profile/password API => forgot password API
 - Validate all the data in every POST, PATCH APIs
 
+
+Day -06
+
+Session -01
+
+- Create Coonection Request schema
+- Send Connection Request API
+- Proper Validation of Data 
+- Think about all the corner cases
+- $or query and $and query in moongose
+- schema.pre("save) function
+- Read more about indexes in MongoDB
+- Why do we need index in DB
+- 
+
