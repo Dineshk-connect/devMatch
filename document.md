@@ -148,3 +148,13 @@ Session -01
 - Write code with proper validations for POST /request/review/:status/:requestId
 - Read about ref and populate 
 - Create GET /user/requests/recieved with all the checks
+
+Session -02
+
+- Logic for GET /feed API
+- Explore the $nin, $and, $ne and other query opeartors
+- pagination
+
+- /feed?page=1&limit=10 => 1-10
+- /feed?page=2&limit=10 => 11-20
+- /feed?page=3&limit=10 => 21-30
