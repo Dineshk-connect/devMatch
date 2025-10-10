@@ -134,5 +134,17 @@ Session -01
 - schema.pre("save) function
 - Read more about indexes in MongoDB
 - Why do we need index in DB
-- 
+- Always think about corner Cases
 
+Note: POST(/request/review/accepted/68e8f0bd089085b2ed43191b)
+- In the above API the requestId should from the ConnectionRequests document which meana that If A sent a connectionRequest to B 
+  then on unique Id will created in the schema , you should pass that ID
+
+
+Day -07
+
+Session -01
+
+- Write code with proper validations for POST /request/review/:status/:requestId
+- Read about ref and populate 
+- Create GET /user/requests/recieved with all the checks
