@@ -10,12 +10,12 @@ const validatesignupdata=(req)=>{
         throw new Error("Email is not valid");
     }else if(!validator.isStrongPassword(password)){
         throw new Error("Enter strong password");
-    }
+    };
 };
 
 const validateEditProfileData=(req)=>{
 
-    const allowedEditFields=["photoUrl","about","age","skills"];
+    const allowedEditFields=["firstName","lastName","gender","photoUrl","about","age","skills"];
 
    const isEditAllowed= Object.keys(req.body).every(field=>allowedEditFields.includes(field));
      
