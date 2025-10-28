@@ -158,3 +158,7 @@ Session -02
 - /feed?page=1&limit=10 => 1-10
 - /feed?page=2&limit=10 => 11-20
 - /feed?page=3&limit=10 => 21-30
+- /feed?page=4&limit=10 => 31-40
+- /feed?page=5&limit=10 => 41-50
+- /feed?page=6&limit=10 => 51-60
+- /feed?page  
