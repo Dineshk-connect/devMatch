@@ -3,12 +3,15 @@ const { userAuth } = require("../middlewares/auth");
 const paymentRouter = express.Router();
 const razorpayInstance = require("../utils/razorpay");
 const Payments = require("../models/payments");
+const User = require("../models/user"); // ✅ You forgot to import this
 const { membershipAmount } = require("../utils/constants");
 
+// ✅ Create Razorpay Order
 paymentRouter.post("/payment/create/", userAuth, async (req, res) => {
   try {
     const { membershipType } = req.body;
     const { firstName, lastName, email } = req.user;
+
     const order = await razorpayInstance.orders.create({
       amount: membershipAmount[membershipType] * 100,
       currency: "INR",
@@ -17,11 +20,11 @@ paymentRouter.post("/payment/create/", userAuth, async (req, res) => {
         firstName,
         lastName,
         email,
-        membershipType: membershipType,
+        membershipType,
       },
     });
-    //Save it in Database
-    console.log(order);
+
+    console.log("Razorpay Order:", order);
 
     const payment = new Payments({
       userId: req.user._id,
@@ -35,10 +38,48 @@ paymentRouter.post("/payment/create/", userAuth, async (req, res) => {
 
     const savedPayment = await payment.save();
 
-    // Return back order details to frontend
-    res.json({ ...savedPayment.toJSON(), keyId:process.env.RAZORPAY_KEY_ID});
+    // Send order details to frontend
+    res.json({
+      ...savedPayment.toJSON(),
+      keyId: process.env.RAZORPAY_KEY_ID,
+    });
   } catch (err) {
-    return res.status(500).json({ msg: err.message });
+    console.error("Payment creation error:", err);
+    res.status(500).json({ msg: err.message });
+  }
+});
+
+// ✅ Handle successful payment (update DB + user)
+paymentRouter.post("/payment/success", userAuth, async (req, res) => {
+  try {
+    const { orderId, paymentId } = req.body;
+
+    // Update payment record
+    const payment = await Payments.findOneAndUpdate(
+      { orderId },
+      { status: "paid", paymentId },
+      { new: true }
+    );
+
+    if (!payment) {
+      return res.status(404).json({ msg: "Payment not found" });
+    }
+
+    // Update user to premium
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user._id,
+      { isPremium: true },
+      { new: true }
+    );
+
+    res.json({
+      msg: "Payment successful, premium activated!",
+      payment,
+      user: updatedUser,
+    });
+  } catch (err) {
+    console.error("Payment success error:", err);
+    res.status(500).json({ msg: "Internal Server Error" });
   }
 });
 

@@ -56,6 +56,50 @@ userRouter.get("/user/connections", userAuth, async (req, res) => {
   }
 });
 
+// Get a specific user's profile (by ID) with connection status
+userRouter.get("/user/:id", userAuth, async (req, res) => {
+  try {
+    const { id: targetUserId } = req.params;
+    const currentUserId = req.user._id.toString();
+
+    // Fetch the target user info (exclude password)
+    const user = await User.findById(targetUserId).select(USER_SAFE_DATA + " about");
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    // Check if there's an existing connection or request
+    const existingRequest = await ConnectionRequest.findOne({
+      $or: [
+        { fromUserId: currentUserId, toUserId: targetUserId },
+        { fromUserId: targetUserId, toUserId: currentUserId },
+      ],
+    });
+
+    let connectionStatus = "not_connected"; // default
+
+    if (existingRequest) {
+      if (existingRequest.status === "accepted") {
+        connectionStatus = "connected";
+      } else {
+        connectionStatus = "pending"; // 'interested' or other pending status
+      }
+    }
+
+    return res.status(200).json({
+      success: true,
+      user,
+      connectionStatus,
+    });
+  } catch (error) {
+    console.error("❌ Error fetching user profile:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Error fetching user profile",
+    });
+  }
+});
+
 userRouter.get("/feed", userAuth, async (req, res) => {
   try {
     const LoggedInUser = req.user;
@@ -64,31 +108,36 @@ userRouter.get("/feed", userAuth, async (req, res) => {
     let limit = parseInt(req.query.limit) || 10;
     limit = limit > 50 ? 50 : limit;
 
-    const skip = (page - 1) * limit;  
+    const skip = (page - 1) * limit;
 
-    const connectionRequest = await ConnectionRequest.find({
-      $or: [{ fromUserId: LoggedInUser._id }, { toUserId: LoggedInUser._id }],
+    // Get all existing connection requests for the logged-in user
+    const existingConnections = await ConnectionRequest.find({
+      $or: [
+        { fromUserId: LoggedInUser._id },
+        { toUserId: LoggedInUser._id },
+      ],
     }).select("fromUserId toUserId");
 
-    const hideUsersFromFeed = new Set();
-    connectionRequest.forEach((req) => {
-      hideUsersFromFeed.add(req.fromUserId.toString());
-      hideUsersFromFeed.add(req.toUserId.toString());
+    const excludedUserIds = new Set();
+    existingConnections.forEach((request) => {
+      excludedUserIds.add(request.fromUserId.toString());
+      excludedUserIds.add(request.toUserId.toString());
     });
 
-    const users = await User.find({
-      $and: [
-        { _id: { $nin: Array.from(hideUsersFromFeed) } },
-        { _id: { $ne: LoggedInUser._id } },
-      ],
-    })
-    .select(USER_SAFE_DATA)
-    .skip(skip)
-    .limit(limit);
+    // Also exclude the logged-in user themselves
+    excludedUserIds.add(LoggedInUser._id.toString());
 
-    res.json({data: users});
+    const users = await User.find({
+      _id: { $nin: [...excludedUserIds] },
+    })
+      .select(USER_SAFE_DATA)
+      .skip(skip)
+      .limit(limit);
+
+    res.json({ data: users });
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
 });
+
 module.exports = userRouter;
